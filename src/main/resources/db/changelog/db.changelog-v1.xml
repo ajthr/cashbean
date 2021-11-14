@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Ajith" id="create-tables">
+        <createTable tableName="users">
+            <column name="user_id" type="UUID">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+        </createTable>
+        <createTable tableName="groups">
+            <column name="group_id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_group_user" references="users(user_id)"/>
+            </column>
+        </createTable>
+        <createTable tableName="entry">
+            <column name="entry_id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="amount" type="INT"/>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_entry_user" references="users(user_id)"/>
+            </column>
+            <column name="group_id" type="UUID">
+                <constraints foreignKeyName="fk_entry_group" references="groups(group_id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

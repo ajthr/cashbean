@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+
+  cashbean:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: cashbean
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/src
+    environment:
+      - POSTGRES_USER=cashbean
+      - POSTGRES_USER_PASSWORD=cashbeanpwd
+      - POSTGRES_DB=cashbean
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    container_name: cashbean-database
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=cashbean
+      - POSTGRES_PASSWORD=cashbeanpwd
+      - POSTGRES_DB=cashbean
+    volumes:
+      - cashbean-data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+
+volumes:
+  cashbean-data:
